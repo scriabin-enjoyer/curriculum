@@ -31,33 +31,26 @@ In this project, we will be using the simplest type of graph, an undirected, unw
 
 In our code, there are several ways we could represent a graph. Two of the most common representations include *adjacency lists* and *adjacency matrices*. Read this article about [graphs and their representations](https://www.geeksforgeeks.org/graph-and-its-representations/) from GeeksforGeeks to familiarise yourself with these ideas. They have some example code, but don't pay too much attention to this, as it's a little different to the code we'll be writing in this project.
 
-In this project, we'll be using an adjacency matrix to represent the graph. We've picked this style of graph because it gives you great practice at adding and removing vertices, and making sure everything stays in sync. However, in future projects (like Knight Travails) you may wish to go for an adjacency list approach, since you have a bit less manual work to do keeping the state in check.
+In this project, we'll be using an adjacency list to represent the graph. We've picked this style of graph because it generally requires less manual bookkeeping when adding or removing vertices, making it easier to keep the graph’s state consistent. Adjacency lists also use less space for many real-world graphs and make it simpler to work with a vertex’s immediate neighbors. For these reasons, adjacency lists are often a better fit for modeling the kinds of relationships you'll encounter in practice. If you would like, you can read this article about [the differences between using adjacency lists and adjacency matrices](https://www.geeksforgeeks.org/dsa/comparison-between-adjacency-list-and-adjacency-matrix-representation-of-graph/)
 
 ### Assignment
 
 <div class="lesson-content__panel" markdown="1">
 
-You'll build an undirected, unweighted graph implementation using an adjacency matrix. The focus is on understanding how to store and manipulate graph relationships. For simplicity, you may assume that the values of each vertex are unique in the graph.
+You'll build an undirected, unweighted graph implementation using an adjacency list. The focus is on understanding how to store and manipulate graph relationships. For simplicity, you may assume that the values of each vertex are unique in the graph.
 
-Build a `Graph` class to represent your graph. For now it should only include storage for a list of `@vertices` and a `@matrix` (or 2D array) to serve as the adjacency matrix. Then proceed to create the following methods:
+Build a `Graph` class to represent your graph. For now, it should only include storage for an `@adjacency_list`. You can use a hash as the underlying storage mechanism for the list. Then proceed to create the following methods:
 
-1. `add_vertex(value)`: Adds a new value to the list of vertices and expands the matrix
-
-   **Hint:** The adjacency matrix should always be of size `n × n` where `n` is the number of vertices.
+1. `add_vertex(value)`: Adds a new value to the adjacency list.
 
 1. `add_edge(value1, value2)`: Creates an edge between two vertices
 
-    **Tip:** If you would like to visualize your graph, here is a `to_s` function that you can use to print your graph's adjacency matrix in a structured format. Once this method is defined on your `Graph`, you will be able to `puts my_graph`, where `my_graph` is an instance of your `Graph` class. Note that this method prints the indexes of the vertices on the top and to the left of the matrix. This indicates which vertices are associated with which column or row in the matrix.
+1. `to_s`: Returns a string representation of the underlying adjacency list. Once you implement this method on your `Graph`, you will be able to `puts my_graph`, where `my_graph` is an instance of your `Graph` class. The string representation should look something like this:
 
-    ```ruby
-    def to_s
-      first_row = '  ' + @vertices.length.times.map(&:to_s).join(' ') + "\n"
-      other_rows = String.new
-      @matrix.each_with_index do |row, i|
-        other_rows << "#{i} #{row.join(' ')}\n"
-      end
-      first_row + other_rows
-    end
+    ```text
+    X -> ( Y, Z )
+    Y -> ( X )
+    Z -> ( X )
     ```
 
 1. `vertex?(value)`: Checks if a vertex exists.
@@ -110,12 +103,11 @@ Build a `Graph` class to represent your graph. For now it should only include st
 
    ```ruby
     puts graph
-    # The matrix should now look like this:
-    #   A B C D
-    # A 0 1 1 0
-    # B 1 0 1 0
-    # C 1 1 0 1
-    # D 0 0 1 0
+    # The list should now look like this:
+    # A -> ( B, C )
+    # B -> ( A, C )
+    # C -> ( A, B, D )
+    # D -> ( C )
 
    p graph.order # => 4
    p graph.size # => 4
